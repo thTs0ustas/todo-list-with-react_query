@@ -1,7 +1,7 @@
-import React from "react";
 import { map } from "lodash/fp";
-import Line from "../line/Line";
+import React from "react";
 import useApp from "../../hooks/useApp";
+import Line from "../line/Line";
 import Link from "../link/Link";
 import "./App.css";
 
@@ -43,6 +43,7 @@ function App() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && addTodo()}
           />
           <button type="button" onClick={addTodo}>
             Add
