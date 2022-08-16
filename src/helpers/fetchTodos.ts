@@ -1,22 +1,25 @@
 import React from "react";
-import { reduce } from "lodash/fp";
-import { take } from "lodash";
+import { flow, reduce, take } from "lodash/fp";
+import { assign, omit } from "lodash";
+import axios from "axios";
 import { ToDo } from "../components/app/App";
 
 const fetchTodo = (setTodo: React.Dispatch<React.SetStateAction<ToDo[]>>) =>
-  fetch(`https://jsonplaceholder.typicode.com/posts`)
-    .then((res) => res.json())
-    .then((data) => {
+  axios
+    .get(`https://jsonplaceholder.typicode.com/posts`)
+    .then(({ data }) => {
       if (data.isError) {
         throw new Error(data.error);
       }
-      return reduce(
-        (acc: ToDo[], item: ToDo) => ({
-          ...acc,
-          [item.id]: { ...item, completed: false },
-        }),
-        {} as ToDo[]
-      )(take(data, 20));
+      return flow(
+        reduce(
+          (acc: ToDo[], item: ToDo) => ({
+            ...acc,
+            [item.id]: assign({}, omit(item, "userId"), { completed: false }),
+          }),
+          {} as ToDo[]
+        )
+      )(take(20)(data));
     })
     .then((data) => {
       setTodo(data);

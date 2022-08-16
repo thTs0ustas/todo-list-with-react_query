@@ -1,21 +1,21 @@
 import React from "react";
 import { map } from "lodash/fp";
-import "./App.css";
 import Line from "../line/Line";
 import useApp from "../../hooks/useApp";
 import Link from "../link/Link";
+import "./App.css";
 
 export interface ToDo {
   id: number;
   title: string;
   completed: boolean;
-  userId: number;
 }
 
 function App() {
   const {
     isSuccess,
     input,
+    type,
     setType,
     setInput,
     addTodo,
@@ -30,7 +30,7 @@ function App() {
           <ul className="App-header">
             {map(
               (item: string) => (
-                <Link item={item} setType={setType} />
+                <Link key={item} item={item} setType={setType} type={type} />
               ),
               ["All", "Pending", "Completed"]
             )}
