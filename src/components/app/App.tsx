@@ -1,6 +1,7 @@
 import { map } from "lodash/fp";
 import React from "react";
 import useApp from "../../hooks/useApp";
+import Input from "../input/input";
 import Line from "../line/Line";
 import Link from "../link/Link";
 import "./App.css";
@@ -38,17 +39,7 @@ function App() {
         </nav>
       </header>
       <main>
-        <div className="add-todo">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && addTodo()}
-          />
-          <button type="button" onClick={addTodo}>
-            Add
-          </button>
-        </div>
+        <Input addTodo={addTodo} input={input} setInput={setInput}/>
         <div className="todo-list">
           {isSuccess &&
             map((item: ToDo) => (
