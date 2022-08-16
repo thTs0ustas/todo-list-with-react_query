@@ -19,13 +19,9 @@ module.exports = {
       { extensions: [".js", ".jsx", ".tsx"] },
     ],
     "import/extensions": "off",
-    // "import/no-unresolved": "off",
-  },
-  settings: {
-    "import/resolver": {
-      node: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
-      },
-    },
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "import/no-unresolved": "off",
+    "jsx-a11y/anchor-is-valid": "off",
   },
 };

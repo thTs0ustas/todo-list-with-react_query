@@ -1,11 +1,10 @@
 import React from "react";
-import { ToDo } from "./App";
+import { ToDo } from "../app/App";
 
-interface Props {
+type Props = {
   item: ToDo;
-  // eslint-disable-next-line no-unused-vars
   onClick: (id: number) => void;
-}
+};
 
 function Line({ item, onClick }: Props) {
   const [checked, setChecked] = React.useState(false);
