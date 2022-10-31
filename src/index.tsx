@@ -1,9 +1,10 @@
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App } from "./components";
-import reportWebVitals from "./reportWebVitals";
 import "./index.css";
+import reportWebVitals from "./reportWebVitals";
 
 const queryClient = new QueryClient();
 
@@ -14,6 +15,7 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <App />
+      <ReactQueryDevtools />
     </QueryClientProvider>
   </React.StrictMode>
 );

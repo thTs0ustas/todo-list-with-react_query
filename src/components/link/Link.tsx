@@ -1,7 +1,7 @@
 import React from "react";
 
 type Props = {
-  setType: (type: string) => void;
+  setType: React.Dispatch<React.SetStateAction<string>>;
   item: string;
   type: string;
 };
@@ -11,7 +11,7 @@ function Link({ setType, item, type }: Props) {
     <button
       type="button"
       className={`link-buttons ${type === item.toLowerCase() ? "active" : ""}`}
-      onClick={() => setType(item.toLowerCase())}
+      onClick={() => setType(item)}
     >
       {item}
     </button>

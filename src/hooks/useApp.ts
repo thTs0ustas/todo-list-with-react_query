@@ -1,31 +1,32 @@
-import React from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
+import { cond, constant, keys, matches, size } from "lodash";
 import { filter } from "lodash/fp";
-import { keys } from "lodash";
+import React from "react";
 import { ToDo } from "../components/app/App";
 import fetchTodo from "../helpers/fetchTodos";
 
 export default () => {
   const [type, setType] = React.useState("all");
   const [input, setInput] = React.useState("");
-  const [todo, setTodo] = React.useState<ToDo[]>([]);
+  const [todos, setTodos] = React.useState<ToDo[]>([]);
 
-  const { isSuccess } = useQuery("todos", () => fetchTodo(setTodo), {
+  const { data, isSuccess } = useQuery(["todos"], () => fetchTodo(setTodos), {
     refetchOnWindowFocus: false,
   });
 
   const handleClick = (id: number) => {
-    setTodo((prevState: ToDo[]) => ({
+    setTodos((prevState: ToDo[]) => ({
+      ...data,
       ...prevState,
       [id]: { ...prevState[id], completed: !prevState[id].completed },
     }));
   };
 
   const addTodo = () => {
-    setTodo((prevState: ToDo[]) => ({
+    setTodos((prevState: ToDo[]) => ({
       ...prevState,
-      [keys(todo).length + 1]: {
-        id: keys(todo).length + 1,
+      [keys(todos).length]: {
+        id: keys(todos).length,
         title: input,
         completed: false,
         userId: 1,
@@ -34,31 +35,41 @@ export default () => {
     setInput("");
   };
 
-  const completedTodo = React.useMemo(
-    () => filter((item: ToDo) => item.completed)(todo as ToDo[]),
-    [todo]
+  const completedTodos = React.useMemo(
+    () => filter((item: ToDo) => item.completed)(todos),
+    [todos]
   );
 
-  const uncompletedTodo = React.useMemo(
-    () => filter((item: ToDo) => !item.completed)(todo as ToDo[]),
-    [todo]
+  const uncompletedTodos = React.useMemo(
+    () => filter((item: ToDo) => !item.completed)(todos),
+    [todos]
   );
 
   const typeOfList = () =>
-    ({ all: todo, pending: uncompletedTodo, completed: completedTodo }[type]);
+    ({ all: todos, pending: uncompletedTodos, completed: completedTodos }[
+      type
+    ]);
+
+  const count = cond<string, number>([
+    [matches("all"), constant(size(todos))],
+    [matches("pending"), constant(size(uncompletedTodos))],
+    [matches("completed"), constant(size(completedTodos))],
+  ]);
 
   return {
-    todo,
+    data,
+    todo: todos,
     type,
     input,
     isSuccess,
-    completedTodo,
-    uncompletedTodo,
-    setTodo,
+    completedTodo: completedTodos,
+    uncompletedTodo: uncompletedTodos,
+    setTodo: setTodos,
     addTodo,
     setType,
     setInput,
     typeOfList,
     handleClick,
+    count,
   };
 };
